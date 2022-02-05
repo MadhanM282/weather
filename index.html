@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            background: black;
+            /* background-image: linear-gradient(to right, black , rgb(26, 27, 34)); */
+            color: white;
+        }
+
+        #styles {
+            width: 600px;
+            height: 500px;
+        }
+
+        .containor {
+            display: flex;
+        }
+
+        .main {
+            display: grid;
+            width: fit-content;
+            grid-template-rows: repeat(3, 1fr);
+            grid-template-columns: repeat(3, 1fr);
+            grid-gap: 10px;
+            margin: left;
+            margin-top: 30px;
+            /* border: 1px solid; */
+            margin-left: 50px;
+
+        }
+
+        .main>div {
+            margin-left: 20px;
+            background: #3b3b47;
+            width: 220px;
+            text-align: center;
+            border-radius: 10px;
+            background-image: linear-gradient(to top right, rgb(5, 5, 5), rgb(26, 24, 24));
+            /* border: 1px solid; */
+            margin-top: 10px;
+           
+        }
+
+        .main>div>div {
+            color: rgb(179, 177, 177);
+        }
+
+        #top {
+
+            width: fit-content;
+            margin: auto;
+        }
+
+        .a {
+            padding: 10px;
+            border-radius: 10px;
+            border: 0px;
+            font-size: 15px;
+        }
+
+        #b {
+            background: #ff7300;
+        }
+
+        #b:hover {
+            background: rgb(51, 180, 167);
+        }
+
+        #h1 {
+            width: fit-content;
+            margin: auto;
+            font-family: sans-serif;
+            margin-bottom: 30px;
+            font-weight: lighter
+        }
+
+        .main>div>h3 {
+            text-align: left;
+            margin-left: 10px;
+            border: 1px solid rgb(95, 95, 95);
+            border-radius: 5px;
+            padding: 5px 15px;
+            width: fit-content;
+            font-family: sans-serif;
+            font-weight: lighter;
+
+        }
+
+        .main>div>p {
+            text-align: right;
+            padding-right: 20px;
+            font-size: 35px;
+        }
+        #styles{
+           width: 400px;
+           height:600px;
+           border-radius: 10px;
+           box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+           margin-top: 40px;
+           margin-left: 50px;
+
+        }
+    </style>
+</head>
+
+<body>
+    <h1 id="h1">Weather Forcast</h1>
+    <div id="top">
+        <input class="a" type="text" id="city" placeholder="enter city">
+        <button class="a" id="b" onclick="weather(map())">search</button>
+    </div>
+
+    <div class="containor">
+
+        <div class="main">
+
+
+        </div>
+        <div>
+            <div class="mapouter">
+                <div class="gmap_canvas">
+
+                    <a href="https://123movies-a.com"></a>
+                    <br>
+                    <style>
+                        .mapouter {
+                            position: relative;
+                            text-align: right;
+                            height: 300px;
+
+                            width: 300px;
+
+                        }
+                    </style>
+                    <style>
+                        .gmap_canvas {
+                            overflow: hidden;
+                            background: none !important;
+                            height: 400px;
+                            width: 400px;
+
+                        }
+                    </style>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+</body>
+
+</html>
+<script>
+
+    async function weather() {
+        document.querySelector(".main").innerHTML = ""
+        try {
+            let city = document.querySelector("#city").value;
+
+            let res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=d37ed949998c553fe0051c5183f8af98&units=metric`);
+
+            let data = await res.json()
+
+            let response = await fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${data.coord.lat}&lon=${data.coord.lon}&exclude=&appid=0d73de379dffe7d028b1d22e3459a4fc&units=metric`);
+
+            let corde = await response.json()
+            console.log('cords', corde.daily);
+
+            show(corde.daily)
+        }
+        catch (err) {
+            console.log(err)
+
+        }
+
+
+
+    }
+
+
+
+
+    function show(data) {
+
+        var week = ["Mon", "Tue", "Wed", "Thur", "Fri", "Sat", "Sun", "Mon"];
+
+        data.map(function (ele, i) {
+
+            let h3 = document.createElement("h3");
+
+            h3.textContent = week[i];
+
+            let maindiv = document.createElement("div")
+
+            let maxt = document.createElement("p");
+            maxt.innerHTML = ` ${Math.floor(ele.temp.max)}°`
+            maxt.style.fontFamily = "sans-serif"
+
+            let div = document.createElement("div")
+
+            let typeofday = document.createElement("h2");
+
+            typeofday.innerHTML = ele.weather[0].main
+
+            if (typeofday.innerHTML === "Clear") {
+                var day = document.createElement("img");
+                day.src = "https://img.icons8.com/ios/50/D97900/sun--v1.png"
+                var p = document.createElement("p");
+                p.style.fontFamily = "sans-serif"
+                p.innerHTML = "Sunny"
+                div.append(day, p);
+            }
+            if (typeofday.innerHTML === "Clouds") {
+                var day = document.createElement("img");
+                day.src = "https://img.icons8.com/office/50/ffffff/cloud.png"
+                var p = document.createElement("p");
+                p.style.fontFamily = "sans-serif"
+                p.innerHTML = "Cloudy"
+                div.append(day, p);
+            }
+            if (typeofday.innerHTML === "Snow") {
+                var day = document.createElement("img");
+                day.src = "https://img.icons8.com/ios-filled/50/ffffff/snowflake.png"
+                var p = document.createElement("p");
+                p.style.fontFamily = "sans-serif"
+                p.innerHTML = "Snow"
+                div.append(day, p);
+            }
+            if (typeofday.innerHTML === "Rain") {
+                var day = document.createElement("img");
+                day.src = "https://img.icons8.com/officel/50/ffffff/rain.png"
+                var p = document.createElement("p");
+                p.style.fontFamily = "sans-serif"
+                p.innerHTML = "Rainy"
+                div.append(day, p);
+            }
+
+
+            maindiv.append(h3, div, maxt)
+
+
+            document.querySelector(".main").append(maindiv)
+        })
+    }
+
+    async function map() {
+
+        let maparea = document.querySelector("#city").value;
+
+        let url = `https://www.google.com/maps/embed/v1/place?key=AIzaSyBHkEG6v4fc1HhZLLT-PTkDjig7rtCMd7M&q=${maparea}`
+
+        document.querySelector(".gmap_canvas").innerHTML = ""
+
+        let x = document.querySelector(".gmap_canvas")
+
+        let iframe = document.createElement("iframe");
+        iframe.src = url;
+        iframe.setAttribute("id", "styles")
+        iframe.setAttribute("frameborder", "0");
+        iframe.setAttribute("scrolling", "no")
+        x.append(iframe)
+
+    }
+    function mapind(data) {
+        var main = document.querySelector("#map")
+        src = data.url;
+        document.querySelector("#map").append(src)
+    }
+
+</script>
