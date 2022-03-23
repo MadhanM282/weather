@@ -16,3 +16,5 @@ link to open....
 - when the user enter a place in the search box and click on search we will get the data of the particular area of 8 days
 
 - along with the weather results you can see the map on the right side of the screen
+![image](https://user-images.githubusercontent.com/96064381/159695967-5954f5f1-9a37-4fd1-93c1-c9e0d0b0db6f.png)
+
